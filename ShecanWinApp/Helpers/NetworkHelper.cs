@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Net;
 using System.Net.NetworkInformation;
 using System.Threading;
 using ZetaLongPaths;
@@ -11,16 +13,27 @@ namespace ShecanWinApp.Helpers
     {
         public static NetworkInterface GetActiveEthernetOrWifiNetworkInterface()
         {
-            var nic = NetworkInterface.GetAllNetworkInterfaces().FirstOrDefault(
-                a => a.OperationalStatus == OperationalStatus.Up &&
-                     (a.NetworkInterfaceType == NetworkInterfaceType.Wireless80211 || a.NetworkInterfaceType == NetworkInterfaceType.Ethernet) &&
-                     a.GetIPProperties().GatewayAddresses.Any(g => g.Address.AddressFamily.ToString() == "InterNetwork"));
-            return nic;
+            return GetAllEthernetOrWifiNetworkInterface().FirstOrDefault(a =>
+                a.OperationalStatus == OperationalStatus.Up &&
+                a.GetIPProperties().GatewayAddresses.Any(g => g.Address.AddressFamily.ToString() == "InterNetwork"));
+        }
+
+        public static List<NetworkInterface> GetAllEthernetOrWifiNetworkInterface()
+        {
+            return NetworkInterface.GetAllNetworkInterfaces()
+                .Where(a => a.NetworkInterfaceType == NetworkInterfaceType.Wireless80211 || 
+                            a.NetworkInterfaceType == NetworkInterfaceType.Ethernet)
+                .ToList();
+        }
+
+        public static NetworkInterface GetNetworkInterfaceByName(string networkName)
+        {
+            return GetAllEthernetOrWifiNetworkInterface().FirstOrDefault(q => q.Name.Equals(networkName, StringComparison.InvariantCultureIgnoreCase));
         }
 
         private static string GetExecutingDirectoryPath => ZlpPathHelper.GetDirectoryPathNameFromFilePath(System.Reflection.Assembly.GetExecutingAssembly().Location);
 
-        public static void SetShecanDns(string networkName, string preferredDnsServer, string alternativeDnsServer, OperationSystemEnum operationSystemEnum, Action<string> action)
+        public static void SetDns(string networkName, string preferredDnsServer, string alternateDnsServer, OperationSystemEnum operationSystemEnum, Action<string> action)
         {
             var rootDirectory = GetExecutingDirectoryPath;
             switch (operationSystemEnum)
@@ -29,7 +42,7 @@ namespace ShecanWinApp.Helpers
                     {
                         var commandFilePath = ZlpPathHelper.Combine(rootDirectory, "Commands/Win/Set-Shecan-DNS-Win.bat");
                         if (!ZlpIOHelper.FileExists(commandFilePath)) throw new Exception($"\"{commandFilePath}\" not found");
-                        var arguments = $@" ""{networkName}"" ""{preferredDnsServer}"" ""{alternativeDnsServer}""";
+                        var arguments = $@" ""{networkName}"" ""{preferredDnsServer}"" ""{alternateDnsServer}""";
                         using var process = new Process
                         {
                             StartInfo =
@@ -90,7 +103,8 @@ namespace ShecanWinApp.Helpers
                     break;
             }
         }
-        public static void RemoveShecanDns(string networkName, OperationSystemEnum operationSystemEnum, Action<string> action)
+
+        public static void RemoveDns(string networkName, OperationSystemEnum operationSystemEnum, Action<string> action)
         {
             var rootDirectory = GetExecutingDirectoryPath;
             switch (operationSystemEnum)
@@ -159,6 +173,15 @@ namespace ShecanWinApp.Helpers
                     }
                     break;
             }
+        }
+
+        public static bool IsDnsSet(string networkName, string preferredDnsServer, string alternateDnsServe, Action<string> action)
+        {
+            var networkInterface = GetNetworkInterfaceByName(networkName);
+            var ipProperties = networkInterface.GetIPProperties();
+            var dnsAddresses = ipProperties.DnsAddresses;
+            return dnsAddresses[0].ToString().Equals(preferredDnsServer) &&
+                   dnsAddresses[1].ToString().Equals(alternateDnsServe);
         }
     }
 }

@@ -21,21 +21,45 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.label1 = new System.Windows.Forms.Label();
+            this.comboBoxNetworks = new System.Windows.Forms.ComboBox();
+            this.labelNetworks = new System.Windows.Forms.Label();
+            this.buttonSetDns = new System.Windows.Forms.Button();
             // 
-            // label1
+            // comboBoxNetworks
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(17, 13);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(38, 15);
-            this.label1.TabIndex = 0;
-            this.label1.Text = "label1";
+            this.comboBoxNetworks.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxNetworks.FormattingEnabled = true;
+            this.comboBoxNetworks.Location = new System.Drawing.Point(71, 9);
+            this.comboBoxNetworks.Name = "comboBoxNetworks";
+            this.comboBoxNetworks.Size = new System.Drawing.Size(204, 23);
+            this.comboBoxNetworks.TabIndex = 1;
+            this.comboBoxNetworks.SelectedIndexChanged += new System.EventHandler(this.comboBoxNetworks_SelectedIndexChanged);
+            // 
+            // labelNetworks
+            // 
+            this.labelNetworks.AutoSize = true;
+            this.labelNetworks.Location = new System.Drawing.Point(8, 12);
+            this.labelNetworks.Name = "labelNetworks";
+            this.labelNetworks.Size = new System.Drawing.Size(57, 15);
+            this.labelNetworks.TabIndex = 2;
+            this.labelNetworks.Text = "Networks";
+            // 
+            // buttonSetDns
+            // 
+            this.buttonSetDns.Location = new System.Drawing.Point(8, 57);
+            this.buttonSetDns.Name = "buttonSetDns";
+            this.buttonSetDns.Size = new System.Drawing.Size(267, 48);
+            this.buttonSetDns.TabIndex = 3;
+            this.buttonSetDns.Text = "Active";
+            this.buttonSetDns.UseVisualStyleBackColor = true;
+            this.buttonSetDns.Click += new System.EventHandler(this.buttonSetDns_Click);
             // 
             // FormMain
             // 
-            this.ClientSize = new System.Drawing.Size(284, 161);
-            this.Controls.Add(this.label1);
+            this.ClientSize = new System.Drawing.Size(284, 113);
+            this.Controls.Add(this.buttonSetDns);
+            this.Controls.Add(this.labelNetworks);
+            this.Controls.Add(this.comboBoxNetworks);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
             this.Name = "FormMain";
@@ -44,8 +68,9 @@
         }
 
         #endregion
-
-        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.ComboBox comboBoxNetworks;
+        private System.Windows.Forms.Label labelNetworks;
+        private System.Windows.Forms.Button buttonSetDns;
     }
 }
 
