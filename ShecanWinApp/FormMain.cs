@@ -61,8 +61,6 @@ namespace ShecanWinApp
             {
                 MessageBox.Show(exception.Message);
             }
-
-            
         }
 
         private void comboBoxNetworks_SelectedIndexChanged(object sender, EventArgs e)
@@ -78,6 +76,22 @@ namespace ShecanWinApp
             if (isDnsSet)
                 buttonSetDns.Text = DeactiveString;
             else 
+                buttonSetDns.Text = ActiveString;
+        }
+
+        private void FormMain_Load(object sender, EventArgs e)
+        {
+            var selectedNetworkName = comboBoxNetworks.SelectedItem.ToString();
+            var isDnsSet = NetworkHelper.IsDnsSet(selectedNetworkName,
+                Constants.ShecanPreferredDnsServer,
+                Constants.ShecanAlternateDnsServerShecan,
+                message =>
+                {
+                    Trace.WriteLine(message);
+                });
+            if (isDnsSet)
+                buttonSetDns.Text = DeactiveString;
+            else
                 buttonSetDns.Text = ActiveString;
         }
     }

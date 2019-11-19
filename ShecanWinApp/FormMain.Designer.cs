@@ -46,7 +46,7 @@
             // 
             // buttonSetDns
             // 
-            this.buttonSetDns.Location = new System.Drawing.Point(8, 57);
+            this.buttonSetDns.Location = new System.Drawing.Point(8, 58);
             this.buttonSetDns.Name = "buttonSetDns";
             this.buttonSetDns.Size = new System.Drawing.Size(267, 48);
             this.buttonSetDns.TabIndex = 3;
@@ -64,6 +64,8 @@
             this.MaximizeBox = false;
             this.Name = "FormMain";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            this.Text = "Shecan";
+            this.Load += new System.EventHandler(this.FormMain_Load);
 
         }
 
@@ -71,6 +73,7 @@
         private System.Windows.Forms.ComboBox comboBoxNetworks;
         private System.Windows.Forms.Label labelNetworks;
         private System.Windows.Forms.Button buttonSetDns;
+        private System.Windows.Forms.CheckBox checkBox1;
     }
 }
 
