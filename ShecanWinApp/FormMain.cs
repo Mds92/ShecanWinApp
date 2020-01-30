@@ -1,7 +1,7 @@
-﻿using System;
+﻿using ShecanWinApp.Helpers;
+using System;
 using System.Diagnostics;
 using System.Windows.Forms;
-using ShecanWinApp.Helpers;
 
 namespace ShecanWinApp
 {
@@ -48,7 +48,7 @@ namespace ShecanWinApp
                 }
                 else
                 {
-                    NetworkHelper.RemoveDns(activeNetworkInterfaceName, 
+                    NetworkHelper.RemoveDns(activeNetworkInterfaceName,
                         OperationSystemEnum.Windows10,
                         message =>
                         {
@@ -62,7 +62,7 @@ namespace ShecanWinApp
                 MessageBox.Show(exception.Message);
             }
 
-            
+
         }
 
         private void comboBoxNetworks_SelectedIndexChanged(object sender, EventArgs e)
@@ -77,7 +77,7 @@ namespace ShecanWinApp
                 });
             if (isDnsSet)
                 buttonSetDns.Text = DeactiveString;
-            else 
+            else
                 buttonSetDns.Text = ActiveString;
         }
     }
